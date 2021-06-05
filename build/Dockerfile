@@ -9,9 +9,8 @@ RUN apk add --no-cache \
     nmap nmap-scripts
 
 RUN apk add --no-cache --virtual .build-deps gcc make musl-dev \
-    && cd /tmp \
-    && wget -q -O /tmp/microsocks.tar.gz https://github.com/rofl0r/microsocks/archive/v1.0.1.tar.gz \
-    && tar -xzvf /tmp/microsocks.tar.gz \
+    && cd /tmp && wget -q -O microsocks.tar.gz https://github.com/rofl0r/microsocks/archive/v1.0.1.tar.gz \
+    && tar -xzvf microsocks.tar.gz \
     && cd microsocks-* \
     && make \
     && make install

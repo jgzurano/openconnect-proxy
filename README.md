@@ -2,10 +2,9 @@
 
 This Docker image contains an [openconnect client](http://www.infradead.org/openconnect/) (version 8.04 with pulse/juniper support) and the [tinyproxy proxy server](https://tinyproxy.github.io/) for http/https connections (default on port 8888) and the [microsocks proxy](https://github.com/rofl0r/microsocks) for socks5 connections (default on port 8889) in a very small [alpine linux](https://www.alpinelinux.org/) image (around 20 MB).
 
-You can find the image on docker hub:
-<https://hub.docker.com/r/wazum/openconnect-proxy>
+[![Docker Repository on Quay](https://quay.io/repository/jgzurano/openconnect-proxy/status "Docker Repository on Quay")](https://quay.io/repository/jgzurano/openconnect-proxy)
 
-# Requirements
+## Requirements
 
 If you don't want to set the environment variables on the command line
 set the environment variables in a `.env` file:
@@ -21,7 +20,7 @@ set the environment variables in a `.env` file:
 
 _Don't use quotes around the values!_
 
-See the [openconnect documentation](https://www.infradead.org/openconnect/manual.html) for available options. 
+See the [openconnect documentation](https://www.infradead.org/openconnect/manual.html) for available options.
 
 Either set the password in the `.env` file or leave the variable `OPENCONNECT_PASSWORD` unset, so you get prompted when starting up the container.
 
@@ -29,13 +28,13 @@ Optionally set a multi factor authentication code:
 
 ```OPENCONNECT_MFA_CODE=<Multi factor authentication code>```
 
-# Run container in foreground
+## Run container in foreground
 
 To start the container in foreground run:
 
 ```sh
  docker run -it --rm --privileged --env-file=.env \
-   -p 8888:8888 -p 8889:8889 wazum/openconnect-proxy:latest
+   -p 8888:8888 -p 8889:8889 quay.io/jgzurano/openconnect-proxy:latest
 ```
 
 The proxies are listening on ports 8888 (http/https) and 8889 (socks). Either use `--net host` or `-p <local port>:8888 -p <local port>:8889` to make the proxy ports available on the host.
@@ -48,7 +47,7 @@ docker run … -e OPENCONNECT_URL=vpn.gateway.com/example \
   -e OPENCONNECT_USER=<Username> …
 ```
 
-# Run container in background
+## Run container in background
 
 To start the container in daemon mode (background) set the `-d` option:
 
@@ -56,14 +55,14 @@ To start the container in daemon mode (background) set the `-d` option:
 
 In daemon mode you can view the stderr log with `docker logs`:
 
-```docker logs `docker ps|grep "wazum/openconnect-proxy"|awk -F' ' '{print $1}'```
+```docker logs `docker ps|grep "quay.io/jgzurano/openconnect-proxy"|awk -F' ' '{print $1}'```
 
-# Use container with docker-compose
+## Use container with docker-compose
 
 ```yaml
     vpn:
       container_name: openconnect_vpn
-      image: wazum/openconnect-proxy:latest
+      image: quay.io/jgzurano/openconnect-proxy:latest
       privileged: true
       env_file:
         - .env
@@ -81,7 +80,7 @@ map the configured ports in the container to your local ports if you want to acc
 on the host too when running your containers. Otherwise only the docker containers in the same
 network have access to the proxy ports.
 
-# Route traffic through VPN container
+## Route traffic through VPN container
 
 Let's say you have a `vpn` container defined as above, then add `network_mode` option to your other containers:
 
@@ -93,7 +92,7 @@ Let's say you have a `vpn` container defined as above, then add `network_mode` o
 
 Keep in mind that `networks`, `extra_hosts`, etc. and `network_mode` are mutually exclusive!
 
-# Configure proxy
+## Configure proxy
 
 The container is connected via _openconnect_ and now you can configure your browser
 and other software to use one of the proxies (8888 for http/https or 8889 for socks).
@@ -109,7 +108,7 @@ You may also set environment variables:
 
 composer, git (if you don't use the git+ssh protocol, see below) and others use these.
 
-# ssh through the proxy
+## ssh through the proxy
 
 You need nc (netcat), corkscrew or something similar to make this work.
 
@@ -144,12 +143,14 @@ An alternative is _corkscrew_ (e.g. install with `brew install corkscrew` on mac
         ProxyCommand            corkscrew 127.0.0.1 8888 %h %p
 ```
 
-# Build
+## Build
 
 You can build the container yourself with
 
-	docker build -f build/Dockerfile -t wazum/openconnect-proxy:custom ./build
+```sh
+docker build -f build/Dockerfile -t quay.io/jgzurano/openconnect-proxy:custom ./build
+```
 
-# Support
+## Support
 
 ...

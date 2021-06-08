@@ -1,7 +1,7 @@
 FROM alpine:3
 LABEL maintainer "Juan Zurano <jgzurano@gmail.com>"
 
-RUN apk add --no-cache openconnect tinyproxy
+RUN apk add --no-cache libcrypto1.1 libssl1.1 libstdc++ openconnect tinyproxy
 
 RUN apk add --no-cache \
     bash ca-certificates wget curl \
